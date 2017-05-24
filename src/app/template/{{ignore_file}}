@@ -1,5 +1,8 @@
+# yeoman config
+.yo-rc.json
+
 # babel dist
-/generators
+/lib
 
 # Numerous always-ignore extensions
 *.bak

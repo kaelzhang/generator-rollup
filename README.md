@@ -19,13 +19,13 @@
 ## Install
 
 ```sh
-$ npm install generator-rollup --save
+$ npm i generator-rollup -g
 ```
 
 ## Usage
 
-```js
-const generator_rollup = require('generator-rollup')
+```
+yo rollup
 ```
 
 ## License
