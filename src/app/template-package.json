@@ -13,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "{{gitUrl}}"
+    "url": "{{git_url}}"
   },
   "keywords": [
     "{{name}}"

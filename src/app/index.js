@@ -21,7 +21,6 @@ module.exports = class extends Generator {
     this.option('git-url')
     this.option('override')
     this.option('email')
-    console.log('options', this.options)
   }
 
   initializing () {
@@ -32,7 +31,7 @@ module.exports = class extends Generator {
     return path.join(this._cwd, ...args)
   }
 
-  _js_name (name) {
+  _jsName (name) {
     return name.replace(REGEX_SPECIAL_VARIABLE, '_')
   }
 
@@ -54,11 +53,18 @@ module.exports = class extends Generator {
         when: () => !this.options.email
 
       }, {
+        name: 'gitUrl',
+        message: 'git remote',
+        when: () => !this.options.gitUrl
+
+      }, {
+
         type: 'confirm',
         name: '_merge_package',
         message: 'package.json exists, merge new fields?',
         default: true,
         when: () => fs.exists(this._resolve('package.json'))
+
       }])
       .then(answers => {
         Object.assign(this.props, answers)
@@ -66,14 +72,30 @@ module.exports = class extends Generator {
     })
   }
 
+  _parseGit () {
+    const gitUrl = this.props.gitUrl || this.options.gitUrl
+    if (!gitUrl) {
+      return {}
+    }
+
+    const parsed = parseGit(gitUrl)
+  }
+
   writing () {
+    const {
+      owner,
+      project,
+      gitUrl
+    } = this._parseGit()
+
     return new Scaffold({
       data: {
         name: this.props.name,
-        js_name: this._js_name(this.props.name),
+        js_name: this._jsName(this.props.name),
         email: this.props.email || this.options.email,
         ignore_file: '.gitignore',
-        npm_ignore_file: '.npmignore'
+        npm_ignore_file: '.npmignore',
+        git_url: gitUrl
       }
     })
     .copy(templateDir, this._cwd)
